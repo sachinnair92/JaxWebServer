@@ -18,6 +18,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
 import java.io.StringReader;
@@ -49,10 +50,12 @@ public class ServicesImpl implements Services {
             DocumentBuilder icBuilder;
             icBuilder = icFactory.newDocumentBuilder();
             Document doc = icBuilder.newDocument();
-           // Element mainRootElement = doc.createElement("Response");
-            //doc.appendChild(mainRootElement);
 
-            Element node = doc.createElement("message");
+            Element mainRootElement = doc.createElement("Response");
+            doc.appendChild(mainRootElement);
+
+            Element node = doc.createElement("status");
+
 
             is_valid=0;
             pwd=null;
@@ -71,14 +74,14 @@ public class ServicesImpl implements Services {
             if(is_valid==1 && pwd.equals(password)){
 
                 node.appendChild(doc.createTextNode("true"));
-                doc.appendChild(node);
+                mainRootElement.appendChild(node);
                 return convertDocumentToString(doc);
 
             }
             else
             {
                 node.appendChild(doc.createTextNode("false"));
-                doc.appendChild(node);
+                mainRootElement.appendChild(node);
                 return convertDocumentToString(doc);
             }
 
@@ -110,19 +113,37 @@ public class ServicesImpl implements Services {
             DocumentBuilder icBuilder;
             icBuilder = icFactory.newDocumentBuilder();
             Document doc = icBuilder.newDocument();
-            Element node = doc.createElement("message");
+            Element mainRootElement = doc.createElement("Response");
+            doc.appendChild(mainRootElement);
 
 
 
-            org.bson.Document doc1 = new org.bson.Document("user_name", User_Name)
-                    .append("password", Password)
-                    .append("hospital_name", Hospital_name)
-                    .append("type_of_user", Type_of_User)
-                    .append("ambulance_id", "null");
+            org.bson.Document doc1;
+            if(!Type_of_User.equals("Ambulance Staff")) {
+                         doc1 = new org.bson.Document("user_name", User_Name)
+                        .append("password", Password)
+                        .append("hospital_name", Hospital_name)
+                        .append("type_of_user", Type_of_User)
+                        .append("ambulance_id", "null");
+            }else
+            {
+                        String temp="amb_"+String.valueOf(gen());
+                        doc1 = new org.bson.Document("user_name", User_Name)
+                        .append("password", Password)
+                        .append("hospital_name", Hospital_name)
+                        .append("type_of_user", Type_of_User)
+                        .append("ambulance_id", temp);
+                Element node = doc.createElement("ambulance_id");
+                node.appendChild(doc.createTextNode(temp));
+                mainRootElement.appendChild(node);
+            }
             collection.insertOne(doc1);
-            node.appendChild(doc.createTextNode("true"));
-            doc.appendChild(node);
-            return convertDocumentToString(doc);
+            Element node = doc.createElement("status");
+
+                node.appendChild(doc.createTextNode("true"));
+                mainRootElement.appendChild(node);
+
+                return convertDocumentToString(doc);
         }
         catch(Exception e)
         {
@@ -131,7 +152,7 @@ public class ServicesImpl implements Services {
         return "null";
     }
 
-    @Override
+ /*   @Override
     public String register_ambulance(String User_Name, String Password, String Hospital_name, String Type_of_User, String ambulance_id) {
         MongoCollection<org.bson.Document> collection = db.getCollection("credentials");
         try {
@@ -140,7 +161,11 @@ public class ServicesImpl implements Services {
             DocumentBuilder icBuilder;
             icBuilder = icFactory.newDocumentBuilder();
             Document doc = icBuilder.newDocument();
-            Element node = doc.createElement("message");
+
+            Element mainRootElement = doc.createElement("Response");
+            doc.appendChild(mainRootElement);
+
+            Element node = doc.createElement("status");
 
             org.bson.Document doc1 = new org.bson.Document("user_name", User_Name)
                     .append("password", Password)
@@ -149,7 +174,7 @@ public class ServicesImpl implements Services {
                     .append("ambulance_id", ambulance_id);
             collection.insertOne(doc1);
             node.appendChild(doc.createTextNode("true"));
-            doc.appendChild(node);
+            mainRootElement.appendChild(node);
             return convertDocumentToString(doc);
         }
         catch(Exception e)
@@ -157,7 +182,7 @@ public class ServicesImpl implements Services {
             e.printStackTrace();
         }
         return "null";
-    }
+    }*/
 
     public int gen() {
         Random r = new Random( System.currentTimeMillis() );
@@ -169,12 +194,16 @@ public class ServicesImpl implements Services {
     public String add_new_patient(String hospital_name, String ambulance_id, String p_name, String gender, String blood_grp, String condition, String problem, String police_case, String is_enabled) {
 
         MongoCollection<org.bson.Document> collection = db.getCollection("patient_details");
+
         try {
 
             DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder icBuilder;
             icBuilder = icFactory.newDocumentBuilder();
             Document doc = icBuilder.newDocument();
+
+            Element mainRootElement = doc.createElement("Response");
+            doc.appendChild(mainRootElement);
 
             String p_id="Patient_"+String.valueOf(gen());
             if(p_name==null)
@@ -194,12 +223,20 @@ public class ServicesImpl implements Services {
                     .append("is_enabled", is_enabled);
 
             collection.insertOne(doc1);
+            System.out.println("1");
             Element node = doc.createElement("P_id");
+            System.out.println("2");
             node.appendChild(doc.createTextNode(p_id));
-            doc.appendChild(node);
-            node = doc.createElement("message");
-            node.appendChild(doc.createTextNode("true"));
-            doc.appendChild(node);
+            System.out.println("3");
+            mainRootElement.appendChild(node);
+            System.out.println("4");
+            Element node1 = doc.createElement("status");
+            System.out.println("5");
+            node1.appendChild(doc.createTextNode("true"));
+            System.out.println("6");
+            node.appendChild(node1);
+            System.out.println("7");
+            mainRootElement.appendChild(node1);
             return convertDocumentToString(doc);
         }
         catch(Exception e)
@@ -219,20 +256,23 @@ public class ServicesImpl implements Services {
             DocumentBuilder icBuilder;
             icBuilder = icFactory.newDocumentBuilder();
             Document doc = icBuilder.newDocument();
+            Element mainRootElement = doc.createElement("Response");
+            doc.appendChild(mainRootElement);
+
+            Element node = doc.createElement("status");
+
 
             UpdateResult ur = collection.updateOne(new org.bson.Document("p_id", p_id).append("hospital_name", hospital_name).append("ambulance_id",ambulance_id), new org.bson.Document("$set", new org.bson.Document("hospital_name", hospital_name).append("ambulance_id", ambulance_id).append("p_name",p_name).append("gender",gender).append("blood_grp",blood_grp).append("condition",condition).append("problem",problem).append("police_case",police_case).append("is_enabled",is_enabled)));
 
 
             if (ur.getModifiedCount() != 0) {
-                Element node = doc.createElement("message");
                 node.appendChild(doc.createTextNode("true"));
-                doc.appendChild(node);
+                mainRootElement.appendChild(node);
                 return convertDocumentToString(doc);
             }
 
-            Element node = doc.createElement("message");
             node.appendChild(doc.createTextNode("false"));
-            doc.appendChild(node);
+            mainRootElement.appendChild(node);
             return convertDocumentToString(doc);
         }
         catch(Exception e)
@@ -256,6 +296,9 @@ public class ServicesImpl implements Services {
             DocumentBuilder icBuilder;
             icBuilder = icFactory.newDocumentBuilder();
             doc1 = icBuilder.newDocument();
+            final Element mainRootElement = doc1.createElement("Response");
+            doc1.appendChild(mainRootElement);
+
 
 
             FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("hospital_name", hospital_name).append("ambulance_id",ambulance_id).append("p_id",p_id));
@@ -269,43 +312,43 @@ public class ServicesImpl implements Services {
 
                     Element node = doc1.createElement("hospital_name");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("hospital_name"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("ambulance_id");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("ambulance_id"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("p_name");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("p_name"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("p_id");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("p_id"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("gender");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("gender"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("blood_grp");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("blood_grp"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("condition");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("condition"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("problem");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("problem"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("police_case");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("police_case"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("is_enabled");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("is_enabled"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                 }
 
@@ -313,15 +356,15 @@ public class ServicesImpl implements Services {
 
 
             if (patientfound) {
-                Element node = doc1.createElement("message");
+                Element node = doc1.createElement("status");
                 node.appendChild(doc1.createTextNode("true"));
-                doc1.appendChild(node);
+                mainRootElement.appendChild(node);
                 return convertDocumentToString(doc1);
             }
 
-            Element node = doc1.createElement("message");
+            Element node = doc1.createElement("status");
             node.appendChild(doc1.createTextNode("false"));
-            doc1.appendChild(node);
+            mainRootElement.appendChild(node);
             return convertDocumentToString(doc1);
         }
         catch(Exception e)
@@ -344,7 +387,8 @@ public class ServicesImpl implements Services {
             DocumentBuilder icBuilder;
             icBuilder = icFactory.newDocumentBuilder();
             Document doc = icBuilder.newDocument();
-
+            final Element mainRootElement = doc.createElement("Response");
+            doc.appendChild(mainRootElement);
 
             FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("hospital_name", hospital_name).append("ambulance_id",ambulance_id).append("p_name",p_id));
 
@@ -361,14 +405,14 @@ public class ServicesImpl implements Services {
             {
                 UpdateResult ur = collection.updateOne(new org.bson.Document("p_id", p_id).append("hospital_name", hospital_name).append("ambulance_id",ambulance_id), new org.bson.Document("$set", new org.bson.Document("heartrate", heartrate)));
                 if (ur.getModifiedCount() != 0) {
-                    Element node = doc.createElement("message");
+                    Element node = doc.createElement("status");
                     node.appendChild(doc.createTextNode("true"));
-                    doc.appendChild(node);
+                    mainRootElement.appendChild(node);
                     return convertDocumentToString(doc);
                 }
-                Element node = doc.createElement("message");
+                Element node = doc.createElement("status");
                 node.appendChild(doc.createTextNode("false"));
-                doc.appendChild(node);
+                mainRootElement.appendChild(node);
                 return convertDocumentToString(doc);
             }else
             {
@@ -377,9 +421,9 @@ public class ServicesImpl implements Services {
                         .append("ambulance_id", ambulance_id)
                         .append("heartrate",heartrate);
                 collection.insertOne(doc1);
-                Element node = doc.createElement("message");
+                Element node = doc.createElement("status");
                 node.appendChild(doc.createTextNode("true"));
-                doc.appendChild(node);
+                mainRootElement.appendChild(node);
                 return convertDocumentToString(doc);
             }
 
@@ -402,6 +446,8 @@ public class ServicesImpl implements Services {
             icBuilder = icFactory.newDocumentBuilder();
             doc1 = icBuilder.newDocument();
 
+            final Element mainRootElement = doc1.createElement("Response");
+            doc1.appendChild(mainRootElement);
 
             FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("hospital_name", hospital_name).append("ambulance_id",ambulance_id).append("p_id",p_id));
 
@@ -415,21 +461,21 @@ public class ServicesImpl implements Services {
 
                     Element node = doc1.createElement("hospital_name");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("hospital_name"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                     node = doc1.createElement("ambulance_id");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("ambulance_id"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
 
                     node = doc1.createElement("p_id");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("p_id"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
 
                     node = doc1.createElement("heartrate");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("heartrate"))));
-                    doc1.appendChild(node);
+                    mainRootElement.appendChild(node);
 
                 }
             });
@@ -437,15 +483,16 @@ public class ServicesImpl implements Services {
 
             if(datafound==true)
             {
-                Element node = doc1.createElement("message");
+                Element node = doc1.createElement("status");
                 node.appendChild(doc1.createTextNode("true"));
-                doc1.appendChild(node);
+                mainRootElement.appendChild(node);
+                return convertDocumentToString(doc1);
             }
 
-            Element node = doc1.createElement("message");
+            Element node = doc1.createElement("status");
             node.appendChild(doc1.createTextNode("false"));
-            doc1.appendChild(node);
-
+            mainRootElement.appendChild(node);
+            return convertDocumentToString(doc1);
         }
         catch(Exception e)
         {
@@ -456,8 +503,43 @@ public class ServicesImpl implements Services {
         return "null";
     }
 
+    @Override
+    public String Testing() {
+        try {
+            DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder icBuilder;
+            icBuilder = icFactory.newDocumentBuilder();
+            Document doc = icBuilder.newDocument();
+            Element mainRootElement = doc.createElement("Response");
+            doc.appendChild(mainRootElement);
 
-    private static String convertDocumentToString(Document doc) {
+            // append child elements to root element
+
+            Element node = doc.createElement("Hello");
+            node.appendChild(doc.createTextNode("213213321"));
+
+            mainRootElement.appendChild(node);
+
+            Element node1 = doc.createElement("how");
+            node1.appendChild(doc.createTextNode("23423423"));
+
+            mainRootElement.appendChild(node1);
+            /*// output DOM XML to console
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(doc);
+            StreamResult console = new StreamResult(System.out);
+            transformer.transform(source, console);*/
+            return convertDocumentToString(doc);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "null";
+    }
+
+
+        private static String convertDocumentToString(Document doc) {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer;
         try {
@@ -474,6 +556,9 @@ public class ServicesImpl implements Services {
 
         return null;
     }
+
+
+
 
     private static Document convertStringToDocument(String xmlStr) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

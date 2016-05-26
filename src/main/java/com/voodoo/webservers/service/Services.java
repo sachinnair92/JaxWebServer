@@ -17,8 +17,6 @@ public interface Services {
 	@WebMethod
 	String register_user( String User_Name,String Password, String Hospital_name,String Type_of_User);
 
-	@WebMethod
-	String register_ambulance(String User_Name,String Password, String Hospital_name,String Type_of_User,String ambulance_id) ;
 
 	@WebMethod
 	String add_new_patient( String hospital_name, String ambulance_id , String p_name, String gender, String blood_grp,String condition,String problem,String police_case,String is_enabled);
@@ -34,5 +32,8 @@ public interface Services {
 
 	@WebMethod
 	String get_heartrate(String hospital_name, String ambulance_id , String p_id) ;
+
+	@WebMethod
+	String Testing() ;
 
 	}
