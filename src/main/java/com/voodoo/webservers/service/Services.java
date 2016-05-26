@@ -33,7 +33,6 @@ public interface Services {
 	@WebMethod
 	String get_heartrate(String hospital_name, String ambulance_id , String p_id) ;
 
-	@WebMethod
-	String Testing() ;
+
 
 	}

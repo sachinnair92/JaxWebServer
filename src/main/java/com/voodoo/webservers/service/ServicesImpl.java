@@ -449,14 +449,14 @@ public class ServicesImpl implements Services {
             final Element mainRootElement = doc1.createElement("Response");
             doc1.appendChild(mainRootElement);
 
-            FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("hospital_name", hospital_name).append("ambulance_id",ambulance_id).append("p_id",p_id));
+            FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("hospital_name", hospital_name).append("ambulance_id", ambulance_id).append("p_id", p_id));
 
-            datafound=false;
+            datafound = false;
             iterable.forEach(new Block<org.bson.Document>() {
                 @Override
                 public void apply(final org.bson.Document document) {
 
-                    datafound=true;
+                    datafound = true;
 
 
                     Element node = doc1.createElement("hospital_name");
@@ -481,8 +481,7 @@ public class ServicesImpl implements Services {
             });
 
 
-            if(datafound==true)
-            {
+            if (datafound == true) {
                 Element node = doc1.createElement("status");
                 node.appendChild(doc1.createTextNode("true"));
                 mainRootElement.appendChild(node);
@@ -493,48 +492,11 @@ public class ServicesImpl implements Services {
             node.appendChild(doc1.createTextNode("false"));
             mainRootElement.appendChild(node);
             return convertDocumentToString(doc1);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
-
-        return "null";
-    }
-
-    @Override
-    public String Testing() {
-        try {
-            DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder icBuilder;
-            icBuilder = icFactory.newDocumentBuilder();
-            Document doc = icBuilder.newDocument();
-            Element mainRootElement = doc.createElement("Response");
-            doc.appendChild(mainRootElement);
-
-            // append child elements to root element
-
-            Element node = doc.createElement("Hello");
-            node.appendChild(doc.createTextNode("213213321"));
-
-            mainRootElement.appendChild(node);
-
-            Element node1 = doc.createElement("how");
-            node1.appendChild(doc.createTextNode("23423423"));
-
-            mainRootElement.appendChild(node1);
-            /*// output DOM XML to console
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            DOMSource source = new DOMSource(doc);
-            StreamResult console = new StreamResult(System.out);
-            transformer.transform(source, console);*/
-            return convertDocumentToString(doc);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
         return "null";
     }
 
@@ -560,7 +522,7 @@ public class ServicesImpl implements Services {
 
 
 
-    private static Document convertStringToDocument(String xmlStr) {
+  /*  private static Document convertStringToDocument(String xmlStr) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         try
@@ -572,6 +534,6 @@ public class ServicesImpl implements Services {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
 }
