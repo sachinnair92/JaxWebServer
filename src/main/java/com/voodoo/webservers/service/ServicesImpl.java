@@ -1,5 +1,6 @@
 package com.voodoo.webservers.service;
 
+import javax.jws.WebParam;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -41,7 +42,7 @@ public class ServicesImpl implements Services {
 
 
 	@Override
-    public String validate_user(String user_name,String password) {
+    public String validate_user(@WebParam(name = "username") String user_name,@WebParam(name = "password") String password) {
 
         MongoCollection<org.bson.Document> collection = db.getCollection("credentials");
 
