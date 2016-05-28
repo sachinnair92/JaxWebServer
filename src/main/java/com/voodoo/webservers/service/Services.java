@@ -1,6 +1,7 @@
 package com.voodoo.webservers.service;
 
 import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.ws.rs.QueryParam;
 
@@ -12,10 +13,10 @@ import javax.ws.rs.QueryParam;
 public interface Services {
 
 	@WebMethod
-	String validate_user(String user_name,String password) ;
+	String validate_user(@WebParam(name = "username") String user_name,@WebParam(name = "password") String password) ;
 
 	@WebMethod
-	String register_user( String User_Name,String Password, String Hospital_name,String Type_of_User);
+	String register_user(String User_Name,String Password, String Hospital_name,String Type_of_User);
 
 
 	@WebMethod
