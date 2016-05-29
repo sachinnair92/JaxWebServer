@@ -3,8 +3,7 @@ package com.voodoo.webservers.service;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.ws.rs.QueryParam;
-
+import javax.jws.soap.SOAPBinding;
 /**
  * @author chamerling
  * 
@@ -12,7 +11,7 @@ import javax.ws.rs.QueryParam;
 @WebService
 public interface Services {
 
-	@WebMethod
+	@WebMethod(operationName="validate_user")
 	String validate_user(@WebParam(name = "username") String user_name,@WebParam(name = "password") String password) ;
 
 	@WebMethod

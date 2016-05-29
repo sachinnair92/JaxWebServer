@@ -1,6 +1,7 @@
 package com.voodoo.webservers.service;
 
 import javax.jws.WebParam;
+import javax.jws.WebService;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -30,6 +31,7 @@ import java.util.Random;
  * @author chamerling
  * 
  */
+@WebService(endpointInterface="com.voodoo.webservers.service.Services", serviceName="Services")
 public class ServicesImpl implements Services {
 
     MongoClientURI connectionString = new MongoClientURI("mongodb://voodoo:722446@ds057862.mlab.com:57862/prms");
@@ -42,9 +44,9 @@ public class ServicesImpl implements Services {
 
 
 	@Override
-    public String validate_user(@WebParam(name = "username") String user_name,@WebParam(name = "password") String password) {
+    public String validate_user( String user_name,String password) {
 
-        MongoCollection<org.bson.Document> collection = db.getCollection("credentials");
+/*        MongoCollection<org.bson.Document> collection = db.getCollection("credentials");
 
 		try {
             DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
@@ -87,22 +89,22 @@ public class ServicesImpl implements Services {
             }
 
 
-			/* //output DOM XML to console
+			*//* //output DOM XML to console
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			DOMSource source = new DOMSource(doc);
 			StreamResult console = new StreamResult(System.out);
-			transformer.transform(source, console);*/
+			transformer.transform(source, console);*//*
 
 			//System.out.println(convertDocumentToString(doc));
 			//System.out.println("\nXML DOM Created Successfully..");
 		}catch(Exception e)
 		{
            e.printStackTrace();
-		}
+		}*/
 
 
-		return "null";
+		return "hello world";
 	}
 
     @Override
