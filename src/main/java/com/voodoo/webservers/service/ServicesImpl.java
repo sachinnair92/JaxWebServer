@@ -46,7 +46,7 @@ public class ServicesImpl implements Services {
 	@Override
     public String validate_user( String user_name,String password) {
 
-/*        MongoCollection<org.bson.Document> collection = db.getCollection("credentials");
+        MongoCollection<org.bson.Document> collection = db.getCollection("credentials");
 
 		try {
             DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
@@ -89,19 +89,19 @@ public class ServicesImpl implements Services {
             }
 
 
-			*//* //output DOM XML to console
+			/* //output DOM XML to console
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			DOMSource source = new DOMSource(doc);
 			StreamResult console = new StreamResult(System.out);
-			transformer.transform(source, console);*//*
+			transformer.transform(source, console);*/
 
 			//System.out.println(convertDocumentToString(doc));
 			//System.out.println("\nXML DOM Created Successfully..");
 		}catch(Exception e)
 		{
            e.printStackTrace();
-		}*/
+		}
 
 
 		return "hello world";
