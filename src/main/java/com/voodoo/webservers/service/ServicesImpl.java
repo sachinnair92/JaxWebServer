@@ -41,7 +41,7 @@ public class ServicesImpl implements Services {
     int is_valid=0;
     boolean patientfound=false;
     boolean datafound;
-
+    String tou,aid,hname;
 
 	@Override
     public String validate_user( String user_name,String password) {
@@ -57,17 +57,23 @@ public class ServicesImpl implements Services {
             Element mainRootElement = doc.createElement("Response");
             doc.appendChild(mainRootElement);
 
-            Element node = doc.createElement("status");
+
 
 
             is_valid=0;
             pwd=null;
+            tou=null;
+            aid=null;
+            hname=null;
             FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("user_name", user_name));
             iterable.forEach(new Block<org.bson.Document>() {
                 @Override
                 public void apply(final org.bson.Document document) {
                     is_valid=1;
                     pwd = String.valueOf(document.get("password"));
+                    tou = String.valueOf(document.get("type_of_user"));
+                    aid = String.valueOf(document.get("ambulance_id"));
+                    hname = String.valueOf(document.get("Hospital_name"));
                 }
 
             });
@@ -75,7 +81,21 @@ public class ServicesImpl implements Services {
 
 
             if(is_valid==1 && pwd.equals(password)){
+                Element node1 = doc.createElement("type_of_user");
+                node1.appendChild(doc.createTextNode(tou));
+                mainRootElement.appendChild(node1);
+                if(tou.equals("Ambulance Staff"))
+                {
 
+                    Element node2 = doc.createElement("ambulance_id");
+                    node2.appendChild(doc.createTextNode(aid));
+                    mainRootElement.appendChild(node2);
+                }else{
+                    Element node2 =doc.createElement("Hospital_name");
+                    node2.appendChild(doc.createTextNode(hname));
+                    mainRootElement.appendChild(node2);
+                }
+                Element node = doc.createElement("status");
                 node.appendChild(doc.createTextNode("true"));
                 mainRootElement.appendChild(node);
                 return convertDocumentToString(doc);
@@ -83,6 +103,7 @@ public class ServicesImpl implements Services {
             }
             else
             {
+                Element node = doc.createElement("status");
                 node.appendChild(doc.createTextNode("false"));
                 mainRootElement.appendChild(node);
                 return convertDocumentToString(doc);
@@ -104,11 +125,11 @@ public class ServicesImpl implements Services {
 		}
 
 
-		return "hello world";
+		return "null";
 	}
 
     @Override
-    public String register_user(String User_Name, String Password, String Hospital_name, String Type_of_User) {
+    public String register_user(String User_Name, String Password, String Hospital_name, String Type_of_User,String Hospital_Name) {
         MongoCollection<org.bson.Document> collection = db.getCollection("credentials");
         try {
 
@@ -127,15 +148,19 @@ public class ServicesImpl implements Services {
                         .append("password", Password)
                         .append("hospital_name", Hospital_name)
                         .append("type_of_user", Type_of_User)
-                        .append("ambulance_id", "null");
+                        .append("ambulance_id", "null")
+                                 .append("hospital_name", Hospital_name);
+
             }else
             {
                         String temp="amb_"+String.valueOf(gen());
                         doc1 = new org.bson.Document("user_name", User_Name)
-                        .append("password", Password)
+                                .append("password", Password)
                         .append("hospital_name", Hospital_name)
                         .append("type_of_user", Type_of_User)
-                        .append("ambulance_id", temp);
+                                .append("ambulance_id", temp)
+                                .append("hospital_name", "null");
+
                 Element node = doc.createElement("ambulance_id");
                 node.appendChild(doc.createTextNode(temp));
                 mainRootElement.appendChild(node);
@@ -525,7 +550,7 @@ public class ServicesImpl implements Services {
 
 
 
-  /*  private static Document convertStringToDocument(String xmlStr) {
+    private static Document convertStringToDocument(String xmlStr) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
         try
@@ -537,6 +562,6 @@ public class ServicesImpl implements Services {
             e.printStackTrace();
         }
         return null;
-    }*/
+    }
 
 }
