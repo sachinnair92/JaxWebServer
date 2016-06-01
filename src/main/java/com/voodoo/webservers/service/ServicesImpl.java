@@ -129,7 +129,7 @@ public class ServicesImpl implements Services {
 	}
 
     @Override
-    public String register_user(String User_Name, String Password, String Hospital_name, String Type_of_User,String Hospital_Name) {
+    public String register_user(String User_Name, String Password, String Hospital_name, String Type_of_User) {
         MongoCollection<org.bson.Document> collection = db.getCollection("credentials");
         try {
 
@@ -143,23 +143,21 @@ public class ServicesImpl implements Services {
 
 
             org.bson.Document doc1;
-            if(!Type_of_User.equals("Ambulance Staff")) {
+            if(Type_of_User.equals("Doctor")) {
                          doc1 = new org.bson.Document("user_name", User_Name)
                         .append("password", Password)
                         .append("hospital_name", Hospital_name)
                         .append("type_of_user", Type_of_User)
-                        .append("ambulance_id", "null")
-                                 .append("hospital_name", Hospital_name);
+                        .append("ambulance_id", "null");
 
             }else
             {
                         String temp="amb_"+String.valueOf(gen());
                         doc1 = new org.bson.Document("user_name", User_Name)
-                                .append("password", Password)
+                        .append("password", Password)
                         .append("hospital_name", Hospital_name)
                         .append("type_of_user", Type_of_User)
-                                .append("ambulance_id", temp)
-                                .append("hospital_name", "null");
+                        .append("ambulance_id", temp);
 
                 Element node = doc.createElement("ambulance_id");
                 node.appendChild(doc.createTextNode(temp));

@@ -15,7 +15,7 @@ public interface Services {
 	String validate_user(@WebParam(name = "username") String user_name,@WebParam(name = "password") String password) ;
 
 	@WebMethod
-	String register_user(@WebParam(name = "username")String User_Name,@WebParam(name = "password")String Password, @WebParam(name = "hospital_name")String Hospital_name,@WebParam(name = "type_of_user")String Type_of_User,@WebParam(name = "hospital_name")String Hospital_Name);
+	String register_user(@WebParam(name = "username")String User_Name,@WebParam(name = "password")String Password, @WebParam(name = "hospital_name")String Hospital_name,@WebParam(name = "type_of_user")String Type_of_User);
 
 
 	@WebMethod
