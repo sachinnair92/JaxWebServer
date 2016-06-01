@@ -132,6 +132,18 @@ public class ServicesImpl implements Services {
     public String register_user(String User_Name, String Password, String Hospital_name, String Type_of_User) {
         MongoCollection<org.bson.Document> collection = db.getCollection("credentials");
         try {
+            is_valid=0;
+            FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("user_name", User_Name));
+            iterable.forEach(new Block<org.bson.Document>() {
+                @Override
+                public void apply(final org.bson.Document document) {
+                    is_valid=1;
+                }
+
+            });
+
+
+
 
             DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder icBuilder;
@@ -141,6 +153,14 @@ public class ServicesImpl implements Services {
             doc.appendChild(mainRootElement);
 
 
+            if(is_valid==1)
+            {
+                Element node = doc.createElement("status");
+                node.appendChild(doc.createTextNode("false"));
+                mainRootElement.appendChild(node);
+
+                return convertDocumentToString(doc);
+            }
 
             org.bson.Document doc1;
             if(Type_of_User.equals("Doctor")) {
@@ -166,10 +186,10 @@ public class ServicesImpl implements Services {
             collection.insertOne(doc1);
             Element node = doc.createElement("status");
 
-                node.appendChild(doc.createTextNode("true"));
-                mainRootElement.appendChild(node);
+            node.appendChild(doc.createTextNode("true"));
+            mainRootElement.appendChild(node);
 
-                return convertDocumentToString(doc);
+            return convertDocumentToString(doc);
         }
         catch(Exception e)
         {
