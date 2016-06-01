@@ -73,7 +73,7 @@ public class ServicesImpl implements Services {
                     pwd = String.valueOf(document.get("password"));
                     tou = String.valueOf(document.get("type_of_user"));
                     aid = String.valueOf(document.get("ambulance_id"));
-                    hname = String.valueOf(document.get("Hospital_name"));
+                    hname = String.valueOf(document.get("hospital_name"));
                 }
 
             });
@@ -92,7 +92,7 @@ public class ServicesImpl implements Services {
                     mainRootElement.appendChild(node2);
                 }
 
-                Element node3 =doc.createElement("Hospital_name");
+                Element node3 =doc.createElement("hospital_name");
                 node3.appendChild(doc.createTextNode(hname));
                 mainRootElement.appendChild(node3);
 
