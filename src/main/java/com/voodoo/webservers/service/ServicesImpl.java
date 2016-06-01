@@ -90,11 +90,12 @@ public class ServicesImpl implements Services {
                     Element node2 = doc.createElement("ambulance_id");
                     node2.appendChild(doc.createTextNode(aid));
                     mainRootElement.appendChild(node2);
-                }else{
-                    Element node2 =doc.createElement("Hospital_name");
-                    node2.appendChild(doc.createTextNode(hname));
-                    mainRootElement.appendChild(node2);
                 }
+
+                Element node2 =doc.createElement("Hospital_name");
+                node2.appendChild(doc.createTextNode(hname));
+                mainRootElement.appendChild(node2);
+
                 Element node = doc.createElement("status");
                 node.appendChild(doc.createTextNode("true"));
                 mainRootElement.appendChild(node);
