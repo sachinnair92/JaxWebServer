@@ -1,10 +1,8 @@
 package com.voodoo.webservers.service;
 
-import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -20,7 +18,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+
 import org.xml.sax.InputSource;
 
 import java.io.StringReader;
@@ -253,7 +251,7 @@ public class ServicesImpl implements Services {
             doc.appendChild(mainRootElement);
 
             String p_id="Patient_"+String.valueOf(gen());
-            if(p_name==null)
+            if(p_name.equals("null"))
             {
                 p_name=p_id;
             }
@@ -270,19 +268,13 @@ public class ServicesImpl implements Services {
                     .append("is_enabled", is_enabled);
 
             collection.insertOne(doc1);
-            System.out.println("1");
             Element node = doc.createElement("P_id");
-            System.out.println("2");
             node.appendChild(doc.createTextNode(p_id));
-            System.out.println("3");
             mainRootElement.appendChild(node);
-            System.out.println("4");
+
             Element node1 = doc.createElement("status");
-            System.out.println("5");
             node1.appendChild(doc.createTextNode("true"));
-            System.out.println("6");
             node.appendChild(node1);
-            System.out.println("7");
             mainRootElement.appendChild(node1);
             return convertDocumentToString(doc);
         }
