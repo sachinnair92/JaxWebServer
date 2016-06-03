@@ -429,7 +429,7 @@ public class ServicesImpl implements Services {
             final Element mainRootElement = doc.createElement("Response");
             doc.appendChild(mainRootElement);
 
-            FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("hospital_name", hospital_name).append("ambulance_id",ambulance_id).append("p_name",p_id));
+            FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("hospital_name", hospital_name).append("ambulance_id",ambulance_id).append("p_id",p_id));
 
             datafound=false;
             iterable.forEach(new Block<org.bson.Document>() {
