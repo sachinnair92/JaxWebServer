@@ -33,6 +33,8 @@ public interface Services {
 	@WebMethod
 	String get_heartrate(@WebParam(name = "hospital_name") String hospital_name,@WebParam(name = "ambulance_id") String ambulance_id ,@WebParam(name = "p_id") String p_id) ;
 
+	@WebMethod
+	String get_Patient_List(@WebParam(name = "hospital_name") String hospital_name) ;
 
 
 	}

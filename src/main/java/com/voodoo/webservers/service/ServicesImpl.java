@@ -1,5 +1,7 @@
 package com.voodoo.webservers.service;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -573,6 +575,101 @@ public class ServicesImpl implements Services {
             e.printStackTrace();
         }
         return null;
+    }
+
+    int count=0;
+    @WebMethod
+    public String get_Patient_List(@WebParam(name = "hospital_name") String hospital_name) {
+
+        MongoCollection<org.bson.Document> collection = db.getCollection("patient_details");
+        try {
+            DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder icBuilder;
+            icBuilder = icFactory.newDocumentBuilder();
+            doc1 = icBuilder.newDocument();
+
+            final Element mainRootElement = doc1.createElement("Response");
+            doc1.appendChild(mainRootElement);
+
+            FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("hospital_name", hospital_name).append("is_enabled", "Yes"));
+
+            datafound = false;
+            count=0;
+            iterable.forEach(new Block<org.bson.Document>() {
+                @Override
+                public void apply(final org.bson.Document document) {
+
+                    datafound = true;
+
+                    Element PatientElement = doc1.createElement("Patient_"+count);
+                    mainRootElement.appendChild(PatientElement);
+
+                    Element node = doc1.createElement("hospital_name");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("hospital_name"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("ambulance_id");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("ambulance_id"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("p_name");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("p_name"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("p_id");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("p_id"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("gender");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("gender"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("blood_grp");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("blood_grp"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("condition");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("condition"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("problem");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("problem"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("police_case");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("police_case"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("is_enabled");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("is_enabled"))));
+                    PatientElement.appendChild(node);
+                    count++;
+
+                }
+            });
+
+
+            if (datafound == true) {
+                Element node = doc1.createElement("status");
+                node.appendChild(doc1.createTextNode("true"));
+                mainRootElement.appendChild(node);
+                Element node1 = doc1.createElement("count");
+                node1.appendChild(doc1.createTextNode(String.valueOf(count)));
+                mainRootElement.appendChild(node1);
+                return convertDocumentToString(doc1);
+            }
+
+            Element node = doc1.createElement("status");
+            node.appendChild(doc1.createTextNode("false"));
+            mainRootElement.appendChild(node);
+            return convertDocumentToString(doc1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return "null";
+
     }
 
 }
