@@ -445,7 +445,7 @@ public class ServicesImpl implements Services {
 
             if(datafound==true)
             {
-                UpdateResult ur = collection.updateOne(new org.bson.Document("p_id", p_id).append("hospital_name", hospital_name).append("ambulance_id",ambulance_id), new org.bson.Document("$set", new org.bson.Document("heartrate", heartrate).append("timestamp",timestamp)));
+                UpdateResult ur = collection.updateOne(new org.bson.Document("p_id", p_id).append("hospital_name", hospital_name).append("ambulance_id",ambulance_id), new org.bson.Document("$set", new org.bson.Document("heartrate", heartrate+";").append("timestamp",timestamp+";")));
                 if (ur.getModifiedCount() != 0) {
                     Element node = doc.createElement("status");
                     node.appendChild(doc.createTextNode("true"));
@@ -461,8 +461,8 @@ public class ServicesImpl implements Services {
                 org.bson.Document doc1 = new org.bson.Document("p_id", p_id)
                         .append("hospital_name", hospital_name)
                         .append("ambulance_id", ambulance_id)
-                        .append("heartrate",heartrate)
-                        .append("timestamp",timestamp);
+                        .append("heartrate",heartrate+";")
+                        .append("timestamp",timestamp+";");
                 collection.insertOne(doc1);
                 Element node = doc.createElement("status");
                 node.appendChild(doc.createTextNode("true"));
