@@ -458,7 +458,7 @@ public class ServicesImpl implements Services {
 
             if(datafound==true)
             {
-                if(cnt<11)
+                if(cnt<10)
                 {
                     heartrate=hr+heartrate;
                     timestamp=tm+timestamp;
@@ -474,8 +474,6 @@ public class ServicesImpl implements Services {
                 else
                 {
                     int cnt1=cnt;
-                    String hr="204;245;345;234;534;234;112;275;656;563;";
-                    String tm= "09/06/2016 01:08:50;09/06/2016 01:09:06;09/06/2016 01:09:21;09/06/2016 01:09:36;09/06/2016 01:09:51;09/06/2016 01:10:50;09/06/2016 01:10:06;09/06/2016 01:10:21;09/06/2016 01:10:36;09/06/2016 01:10:51;";
 
                     cnt1=cnt1%10;
                     String[] hr1=hr.split(";");
