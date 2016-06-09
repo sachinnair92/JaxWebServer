@@ -478,7 +478,7 @@ public class ServicesImpl implements Services {
                     String tm= "09/06/2016 01:08:50;09/06/2016 01:09:06;09/06/2016 01:09:21;09/06/2016 01:09:36;09/06/2016 01:09:51;09/06/2016 01:10:50;09/06/2016 01:10:06;09/06/2016 01:10:21;09/06/2016 01:10:36;09/06/2016 01:10:51;";
 
                     cnt1=cnt1%10;
-                    String[] hr1=tm.split(";");
+                    String[] hr1=hr.split(";");
                     String[] tm1=tm.split(";");
                     hr1[cnt1]=heartrate;
                     tm1[cnt1]=timestamp;
