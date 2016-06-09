@@ -28,7 +28,7 @@ public interface Services {
 	String get_patient_details( @WebParam(name = "hospital_name") String hospital_name,@WebParam(name = "ambulance_id") String ambulance_id ,@WebParam(name = "p_id") String p_id) ;
 
 	@WebMethod
-	String update_heartrate(@WebParam(name = "hospital_name") String hospital_name,@WebParam(name = "ambulance_id") String ambulance_id ,@WebParam(name = "p_id") String p_id,@WebParam(name = "heartrate") String heartrate) ;
+	String update_heartrate(@WebParam(name = "hospital_name") String hospital_name,@WebParam(name = "ambulance_id") String ambulance_id ,@WebParam(name = "p_id") String p_id,@WebParam(name = "heartrate") String heartrate,@WebParam(name = "timestamp") String timestamp) ;
 
 	@WebMethod
 	String get_heartrate(@WebParam(name = "hospital_name") String hospital_name,@WebParam(name = "ambulance_id") String ambulance_id ,@WebParam(name = "p_id") String p_id) ;
