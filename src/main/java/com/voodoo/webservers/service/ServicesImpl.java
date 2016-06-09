@@ -463,21 +463,45 @@ public class ServicesImpl implements Services {
                     heartrate=hr+heartrate;
                     timestamp=tm+timestamp;
                     cnt++;
+                    UpdateResult ur = collection.updateOne(new org.bson.Document("p_id", p_id).append("hospital_name", hospital_name).append("ambulance_id",ambulance_id), new org.bson.Document("$set", new org.bson.Document("heartrate", heartrate+";").append("timestamp",timestamp+";").append("count",cnt)));
+                    if (ur.getModifiedCount() != 0) {
+                        Element node = doc.createElement("status");
+                        node.appendChild(doc.createTextNode("true"));
+                        mainRootElement.appendChild(node);
+                        return convertDocumentToString(doc);
+                    }
                 }
                 else
                 {
+                    int cnt1=cnt;
+                    String hr="204;245;345;234;534;234;112;275;656;563;";
+                    String tm= "09/06/2016 01:08:50;09/06/2016 01:09:06;09/06/2016 01:09:21;09/06/2016 01:09:36;09/06/2016 01:09:51;09/06/2016 01:10:50;09/06/2016 01:10:06;09/06/2016 01:10:21;09/06/2016 01:10:36;09/06/2016 01:10:51;";
 
+                    cnt1=cnt1%10;
+                    String[] hr1=tm.split(";");
+                    String[] tm1=tm.split(";");
+                    hr1[cnt1]=heartrate;
+                    tm1[cnt1]=timestamp;
+                    hr="";
+                    tm="";
+                    for(int i=0;i<hr1.length;i++)
+                    {
+                        hr=hr+hr1[i]+";";
+                        tm=tm+tm1[i]+";";
+                    }
+                    cnt++;
+                    UpdateResult ur = collection.updateOne(new org.bson.Document("p_id", p_id).append("hospital_name", hospital_name).append("ambulance_id",ambulance_id), new org.bson.Document("$set", new org.bson.Document("heartrate", hr+";").append("timestamp",tm+";").append("count",cnt)));
+                    if (ur.getModifiedCount() != 0) {
+                        Element node = doc.createElement("status");
+                        node.appendChild(doc.createTextNode("true"));
+                        mainRootElement.appendChild(node);
+                        return convertDocumentToString(doc);
+                    }
                 }
 
 
 
-                UpdateResult ur = collection.updateOne(new org.bson.Document("p_id", p_id).append("hospital_name", hospital_name).append("ambulance_id",ambulance_id), new org.bson.Document("$set", new org.bson.Document("heartrate", heartrate+";").append("timestamp",timestamp+";").append("count",cnt)));
-                if (ur.getModifiedCount() != 0) {
-                    Element node = doc.createElement("status");
-                    node.appendChild(doc.createTextNode("true"));
-                    mainRootElement.appendChild(node);
-                    return convertDocumentToString(doc);
-                }
+
                 Element node = doc.createElement("status");
                 node.appendChild(doc.createTextNode("false"));
                 mainRootElement.appendChild(node);
