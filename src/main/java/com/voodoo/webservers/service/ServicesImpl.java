@@ -418,6 +418,11 @@ public class ServicesImpl implements Services {
         return "null";
     }
 
+    String hr;
+    String tm;
+    int cnt;
+
+
     @Override
     public String update_heartrate(String hospital_name, String ambulance_id, String p_id, String heartrate,String timestamp) {
 
@@ -434,18 +439,39 @@ public class ServicesImpl implements Services {
 
             FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("hospital_name", hospital_name).append("ambulance_id", ambulance_id).append("p_id",p_id));
 
+            hr="null";
+            tm="null";
+            cnt=0;
             datafound=false;
             iterable.forEach(new Block<org.bson.Document>() {
                 @Override
                 public void apply(final org.bson.Document document) {
+
                     datafound=true;
+                    hr=String.valueOf(document.get("heartrate"));
+                    tm=String.valueOf(document.get("timestamp"));
+                    cnt=Integer.parseInt(String.valueOf(document.get("count")));
                 }
             });
 
 
+
             if(datafound==true)
             {
-                UpdateResult ur = collection.updateOne(new org.bson.Document("p_id", p_id).append("hospital_name", hospital_name).append("ambulance_id",ambulance_id), new org.bson.Document("$set", new org.bson.Document("heartrate", heartrate+";").append("timestamp",timestamp+";")));
+                if(cnt<11)
+                {
+                    heartrate=hr+heartrate;
+                    timestamp=tm+timestamp;
+                    cnt++;
+                }
+                else
+                {
+
+                }
+
+
+
+                UpdateResult ur = collection.updateOne(new org.bson.Document("p_id", p_id).append("hospital_name", hospital_name).append("ambulance_id",ambulance_id), new org.bson.Document("$set", new org.bson.Document("heartrate", heartrate+";").append("timestamp",timestamp+";").append("count",cnt)));
                 if (ur.getModifiedCount() != 0) {
                     Element node = doc.createElement("status");
                     node.appendChild(doc.createTextNode("true"));
@@ -462,7 +488,8 @@ public class ServicesImpl implements Services {
                         .append("hospital_name", hospital_name)
                         .append("ambulance_id", ambulance_id)
                         .append("heartrate",heartrate+";")
-                        .append("timestamp",timestamp+";");
+                        .append("timestamp",timestamp+";")
+                        .append("count","1");
                 collection.insertOne(doc1);
                 Element node = doc.createElement("status");
                 node.appendChild(doc.createTextNode("true"));
