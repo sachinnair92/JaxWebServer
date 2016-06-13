@@ -37,4 +37,13 @@ public interface Services {
 	String get_Patient_List(@WebParam(name = "hospital_name") String hospital_name) ;
 
 
-	}
+	@WebMethod
+	String set_Message(@WebParam(name = "S_uname") String S_uname,@WebParam(name = "S_time") String S_time,@WebParam(name ="R_hosp_name") String R_hosp_name ,@WebParam(name = "R_amb_id") String R_amb_id ,@WebParam(name = "R_pid") String R_pid,@WebParam(name = "Is_amb") String Is_amb) ;
+
+
+	@WebMethod
+	String get_Messages( @WebParam(name = "hospital_name") String hospital_name,@WebParam(name = "ambulance_id") String ambulance_id ,@WebParam(name = "p_id") String p_id) ;
+
+
+
+}

@@ -731,4 +731,125 @@ public class ServicesImpl implements Services {
 
     }
 
+    @Override
+    public String set_Message(String S_uname, String S_time, String R_hosp_name, String R_amb_id, String R_pid,String Is_amb) {
+
+        MongoCollection<org.bson.Document> collection = db.getCollection("Messages");
+
+        try {
+
+            DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder icBuilder;
+            icBuilder = icFactory.newDocumentBuilder();
+            Document doc = icBuilder.newDocument();
+
+            Element mainRootElement = doc.createElement("Response");
+            doc.appendChild(mainRootElement);
+
+
+            org.bson.Document doc1 = new org.bson.Document("S_uname", S_uname)
+                    .append("S_time", S_time)
+                    .append("R_hosp_name", R_hosp_name)
+                    .append("R_amb_id", R_amb_id)
+                    .append("R_pid", R_pid)
+                    .append("Is_amb", Is_amb);
+
+            collection.insertOne(doc1);
+
+
+            Element node = doc.createElement("status");
+            node.appendChild(doc.createTextNode("true"));
+            mainRootElement.appendChild(node);
+
+            return convertDocumentToString(doc);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+        return "null";
+    }
+
+    @Override
+    public String get_Messages(String hospital_name, String ambulance_id, String p_id) {
+
+        MongoCollection<org.bson.Document> collection = db.getCollection("Messages");
+        try {
+            DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder icBuilder;
+            icBuilder = icFactory.newDocumentBuilder();
+            doc1 = icBuilder.newDocument();
+
+            final Element mainRootElement = doc1.createElement("Response");
+            doc1.appendChild(mainRootElement);
+
+            FindIterable<org.bson.Document> iterable = collection.find(new org.bson.Document("R_hosp_name", hospital_name).append("R_amb_id", ambulance_id).append("R_pid", p_id));
+
+            datafound = false;
+            count=0;
+            iterable.forEach(new Block<org.bson.Document>() {
+                @Override
+                public void apply(final org.bson.Document document) {
+
+                    datafound = true;
+
+                    Element PatientElement = doc1.createElement("Message_"+count);
+                    mainRootElement.appendChild(PatientElement);
+
+                    Element node = doc1.createElement("S_uname");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("S_uname"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("S_time");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("S_time"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("R_hosp_name");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("R_hosp_name"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("R_amb_id");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("R_amb_id"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("R_pid");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("R_pid"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("Is_amb");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("Is_amb"))));
+                    PatientElement.appendChild(node);
+
+                    count++;
+
+                }
+            });
+
+
+            if (datafound == true) {
+                Element node = doc1.createElement("status");
+                node.appendChild(doc1.createTextNode("true"));
+                mainRootElement.appendChild(node);
+                Element node1 = doc1.createElement("count");
+                node1.appendChild(doc1.createTextNode(String.valueOf(count)));
+                mainRootElement.appendChild(node1);
+                return convertDocumentToString(doc1);
+            }
+
+            Element node = doc1.createElement("status");
+            node.appendChild(doc1.createTextNode("false"));
+            mainRootElement.appendChild(node);
+            return convertDocumentToString(doc1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        return null;
+    }
+
 }
