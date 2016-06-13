@@ -732,7 +732,7 @@ public class ServicesImpl implements Services {
     }
 
     @Override
-    public String set_Message(String S_uname, String S_time, String R_hosp_name, String R_amb_id, String R_pid,String Is_amb) {
+    public String set_Message(String S_uname, String S_time, String R_hosp_name, String R_amb_id, String R_pid,String msg,String Is_amb) {
 
         MongoCollection<org.bson.Document> collection = db.getCollection("Messages");
 
@@ -752,6 +752,7 @@ public class ServicesImpl implements Services {
                     .append("R_hosp_name", R_hosp_name)
                     .append("R_amb_id", R_amb_id)
                     .append("R_pid", R_pid)
+                    .append("msg", msg)
                     .append("Is_amb", Is_amb);
 
             collection.insertOne(doc1);
@@ -816,6 +817,10 @@ public class ServicesImpl implements Services {
 
                     node = doc1.createElement("R_pid");
                     node.appendChild(doc1.createTextNode(String.valueOf(document.get("R_pid"))));
+                    PatientElement.appendChild(node);
+
+                    node = doc1.createElement("msg");
+                    node.appendChild(doc1.createTextNode(String.valueOf(document.get("msg"))));
                     PatientElement.appendChild(node);
 
                     node = doc1.createElement("Is_amb");

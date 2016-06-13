@@ -38,7 +38,7 @@ public interface Services {
 
 
 	@WebMethod
-	String set_Message(@WebParam(name = "S_uname") String S_uname,@WebParam(name = "S_time") String S_time,@WebParam(name ="R_hosp_name") String R_hosp_name ,@WebParam(name = "R_amb_id") String R_amb_id ,@WebParam(name = "R_pid") String R_pid,@WebParam(name = "Is_amb") String Is_amb) ;
+	String set_Message(@WebParam(name = "S_uname") String S_uname,@WebParam(name = "S_time") String S_time,@WebParam(name ="R_hosp_name") String R_hosp_name ,@WebParam(name = "R_amb_id") String R_amb_id ,@WebParam(name = "R_pid") String R_pid,@WebParam(name = "msg") String msg,@WebParam(name = "Is_amb") String Is_amb) ;
 
 
 	@WebMethod
